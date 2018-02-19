@@ -36,12 +36,17 @@ void insert(node *&t,int k) {
 }
 
 int a1=0, a2=0;
-int dfs(node *t) {
+int H = 0;
+int getheight(node*t) {
 	if (t == NULL)return 0;
-	int ans =max(dfs(t->l),dfs(t->r))+1;
-	if (ans == 1)a1++;
-	if (ans == 2)a2++;
-	return ans;
+	return max(getheight(t->l), getheight(t->r)) + 1;
+}
+void dfs(node *t,int d) {
+	if (t == NULL)return;
+	if (H - d == 2)a1++;
+	if (H - d == 1)a2++;
+	dfs(t->l, d + 1);
+	dfs(t->r, d + 1);
 }
 int main() {
 	freopen("./test.txt", "r", stdin);
@@ -54,8 +59,9 @@ int main() {
 		insert(root, t);
 	}
 	//printf();
-	dfs(root);
-	if (n == 1)swap(a1, a2);
+	H = getheight(root);
+	dfs(root,0);
+	
 	printf("%d + %d = %d",a2,a1,a1+a2);
 	return 0;
 }
